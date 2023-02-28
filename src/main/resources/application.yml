@@ -50,3 +50,6 @@ logging:
     rollingpolicy:
       max-file-size: 100MB
       max-history: 30
+# 个人隐私信息
+qq:
+  config:
