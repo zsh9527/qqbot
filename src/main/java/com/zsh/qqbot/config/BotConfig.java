@@ -26,11 +26,13 @@ public class BotConfig {
     @Bean
     public Bot loginBot() {
         Bot bot = null;
+        ClassLoader classLoader = getClass().getClassLoader();
+        String dirName = classLoader.getResource("device/").getFile();
         BotConfiguration.MiraiProtocol[] protocols = BotConfiguration.MiraiProtocol.values();
         for (BotConfiguration.MiraiProtocol protocol : protocols) {
             bot = BotFactory.INSTANCE.newBot(qqProp.getUsername(), qqProp.getPassword(), new BotConfiguration() {{
                 // 不同协议使用不同设备信息
-                fileBasedDeviceInfo("device/" + protocol.name() + ".json");
+                fileBasedDeviceInfo(dirName + protocol.name() + ".json");
                 // 修改缓存目录到build/cache目录下
                 setCacheDir(new File("build/cache"));
                 setProtocol(protocol);

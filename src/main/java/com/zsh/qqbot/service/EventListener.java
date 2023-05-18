@@ -1,6 +1,8 @@
 package com.zsh.qqbot.service;
 
 import com.zsh.qqbot.handler.EventHandler;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.Bot;
@@ -8,8 +10,6 @@ import net.mamoe.mirai.event.Listener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.stream.Collectors;
 
