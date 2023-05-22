@@ -1,9 +1,10 @@
 plugins {
     id("java")
     id("application")
-    id("org.springframework.boot") version "3.0.2"
+    id("org.springframework.boot") version "3.1.0"
     id("io.spring.dependency-management") version "1.1.0"
     id("org.jetbrains.kotlin.jvm") version "1.7.22"
+    id("org.graalvm.buildtools.native") version "0.9.20"
 }
 
 group = "com.zsh"
@@ -52,3 +53,11 @@ tasks.withType(Test) {
     systemProperty("spring.profiles.active", "unittest")
     useJUnitPlatform()
 }
+
+// 自动复制新的device文件
+task copyGeneratedFile(type: Copy) {
+    from 'build/resources/main/device' // 指定生成的文件的路径
+    into 'src/main/resources/device' // 指定要复制到的目标路径
+}
+
+processResources.dependsOn(copyGeneratedFile)

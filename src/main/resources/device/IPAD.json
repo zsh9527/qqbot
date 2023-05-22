@@ -1,16 +1,16 @@
 {
     "deviceInfoVersion": 2,
     "data": {
-        "display": "MIRAI.858943.001",
+        "display": "MIRAI.697510.001",
         "product": "mirai",
         "device": "mirai",
         "board": "mirai",
         "brand": "mamoe",
         "model": "mirai",
         "bootloader": "unknown",
-        "fingerprint": "mamoe/mirai/mirai:10/MIRAI.200122.001/0599557:user/release-keys",
-        "bootId": "894090EB-8134-213B-6EA2-BEACEC7020E3",
-        "procVersion": "Linux version 3.0.31-y453CGZU (android-build@xxx.xxx.xxx.xxx.com)",
+        "fingerprint": "mamoe/mirai/mirai:10/MIRAI.200122.001/3351098:user/release-keys",
+        "bootId": "1B449BE7-DD10-D04D-0292-174D26C8446F",
+        "procVersion": "Linux version 3.0.31-of7XNAr7 (android-build@xxx.xxx.xxx.xxx.com)",
         "baseBand": "",
         "version": {
             "incremental": "5891938",
@@ -22,8 +22,8 @@
         "macAddress": "02:00:00:00:00:00",
         "wifiBSSID": "02:00:00:00:00:00",
         "wifiSSID": "<unknown ssid>",
-        "imsiMd5": "ac69676c6f78a3a7e950812054f4240a",
-        "imei": "865812143152827",
+        "imsiMd5": "be7577e03dd546517ad716a839763876",
+        "imei": "868199900042749",
         "apn": "wifi"
     }
 }
