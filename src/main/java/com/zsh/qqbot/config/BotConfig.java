@@ -21,6 +21,7 @@ public class BotConfig {
     private final QqProp qqProp;
 
     private final String RESOURCE_DIR = "D:\\coderLife\\githubProject\\qqbot\\src\\main\\resources\\device\\";
+    private final String CACHE_DIR = "D:\\coderLife\\githubProject\\qqbot\\build\\cache";
 
     /**
      * 登录qq机器人 -- 尝试不同协议登录
@@ -30,8 +31,8 @@ public class BotConfig {
         Bot bot = null;
         ClassLoader classLoader = getClass().getClassLoader();
         String dirName = classLoader.getResource("device/").getFile();
-        if (dirName.contains("BOOT-INF/classes!")) {
-            log.info("执行jar包");
+        if (dirName.contains("BOOT-INF/classes!") || !(new File(dirName).exists())) {
+            log.info("执行jar包或本地镜像");
             // jar包, 无法修改文件
             dirName = RESOURCE_DIR;
         }
@@ -42,7 +43,7 @@ public class BotConfig {
                 // 不同协议使用不同设备信息
                 fileBasedDeviceInfo(finalDirName + protocol.name() + ".json");
                 // 修改缓存目录到build/cache目录下
-                setCacheDir(new File("build/cache"));
+                setCacheDir(new File(CACHE_DIR));
                 setProtocol(protocol);
             }});
             try {
