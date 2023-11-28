@@ -32,6 +32,11 @@ public class QqProp {
     private Long loverQQ;
 
     /**
+     * 定时发送消息的好友qq
+     */
+    private Long broQQ;
+
+    /**
      * 管理的群列表
      */
     private List<Long> groups;

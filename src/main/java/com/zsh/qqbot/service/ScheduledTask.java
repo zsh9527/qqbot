@@ -55,6 +55,26 @@ public class ScheduledTask {
     }
 
     /**
+     * 整点执行任务， 间隔2小时
+     */
+    @PostConstruct
+    void initAttackTask() {
+
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(
+            () -> {
+                int hour = LocalDateTime.now().getHour();
+                if ((hour >= 9 && hour <= 12) || (hour >= 15 && hour <= 21)) {
+                    // 非休息时间执行任务
+                    bot.getFriend(qqProp.getBroQQ()).sendMessage(httpClient.buildAttackMessage());
+                }
+            },
+            0,
+            5,
+            TimeUnit.MINUTES);
+    }
+
+    /**
      * 整点8点打卡
      */
     @PostConstruct

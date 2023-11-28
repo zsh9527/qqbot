@@ -1,5 +1,5 @@
 {
-    "deviceInfoVersion": 2,
+    "deviceInfoVersion": 3,
     "data": {
         "display": "MIRAI.110208.001",
         "product": "mirai",
@@ -24,6 +24,7 @@
         "wifiSSID": "<unknown ssid>",
         "imsiMd5": "41e84f819078cf90b803f626fc252a7a",
         "imei": "862670245621906",
-        "apn": "wifi"
+        "apn": "wifi",
+        "androidId": "65d901c75200296d"
     }
 }

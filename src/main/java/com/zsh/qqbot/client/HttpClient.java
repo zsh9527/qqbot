@@ -48,6 +48,16 @@ public class HttpClient {
             .build();
     }
 
+    public MessageChain buildAttackMessage() {
+        return new MessageChainBuilder()
+            .append(new PlainText("大学生\n"))
+            .append(new PlainText("给你哥写英语学习计划和学习方法去\n"))
+            .append(new PlainText("冬天多喝点热水\n"))
+            .append(new PlainText("不要翘二郎腿"))
+            .build();
+
+    }
+
     private Response requestContent(Request request) throws IOException {
         Response response = okHttpClient.newCall(request).execute();
         if (!response.isSuccessful()) {
