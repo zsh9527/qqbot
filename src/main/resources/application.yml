@@ -1,6 +1,7 @@
-server:
-  port: 8080
 spring:
+  main:
+    # 以不占用端口方式启动 没有线程运行自动关闭应用
+    web-application-type: none
   application:
     name: qqbot
   jackson:
@@ -15,28 +16,11 @@ spring:
     max-connection: 1000
     max-request: 100
     max-per-host-request: 30
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: org.h2.Driver
-    username: admin
-    password: 123456
-    url: jdbc:h2:file:D:\coderLife\githubProject\qqbot;MODE=MySQL;DATABASE_TO_LOWER=TRUE;AUTO_SERVER=TRUE
-    hikari:
-      connection-timeout: 10000
-      validation-timeout: 3000
-      idle-timeout: 60000
-      login-timeout: 5
-      max-lifetime: 100000
-      maximum-pool-size: 30
-      minimum-idle: 5
-      read-only: false
-  sql:
-    init:
-      schema-locations: classpath:sql/init.sql
-      mode: never
+  profiles:
+    active: dev
 logging:
   file:
-    path: /home/logs/${spring.application.name}
+    path: ${file.config.log-dir}/${spring.application.name}
   level:
     org: warn
     com: warn
@@ -50,6 +34,11 @@ logging:
     rollingpolicy:
       max-file-size: 100MB
       max-history: 30
+file:
+  config:
+    qq-device-dir: D:\coderLife\githubProject\qqbot\src\main\resources\device\
+    qq-cache-dir: D:\coderLife\githubProject\qqbot\build\cache
+    log-dir: /home/logs
 # 个人隐私信息
 qq:
   config:

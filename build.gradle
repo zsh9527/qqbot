@@ -11,12 +11,6 @@ group = "com.zsh"
 version = "1.0.0-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 repositories {
     maven{
         allowInsecureProtocol = true
@@ -33,9 +27,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation('com.squareup.okhttp3:okhttp:4.10.0')
     implementation("org.apache.commons:commons-lang3")
-    implementation("org.apache.commons:commons-pool2")
-    runtimeOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testCompileOnly("org.projectlombok:lombok")
@@ -54,10 +47,19 @@ tasks.withType(Test) {
     useJUnitPlatform()
 }
 
-// 自动复制新的device文件
-task copyGeneratedFile(type: Copy) {
-    from 'build/resources/main/device' // 指定生成的文件的路径
-    into 'src/main/resources/device' // 指定要复制到的目标路径
+application {
+    mainClass = 'com.zsh.qqbot.QQbotApplication'
+    applicationDefaultJvmArgs = [
+            '-Dfile.encoding=UTF-8',
+            "-Dspring.profiles.active=prod",
+            '-Dspring.config.additional-location=../config/'
+    ]
 }
 
-processResources.dependsOn(copyGeneratedFile)
+//// 自动复制新的device文件
+//task copyGeneratedFile(type: Copy) {
+//    from 'build/resources/main/device' // 指定生成的文件的路径
+//    into 'src/main/resources/device' // 指定要复制到的目标路径
+//}
+//
+//processResources.dependsOn(copyGeneratedFile)

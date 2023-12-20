@@ -37,4 +37,5 @@ out/
 
 ### database ###
 resource/db
-**/application.properties
+**/application-dev.yml
+**/jdk-17.0.9/**

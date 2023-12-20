@@ -52,7 +52,6 @@ public class OkHttpClientConfig {
 
     /**
      * 调试使用, 配置代理
-     * TODO 后续需要配置代理池
      */
     private void configProxy(OkHttpClient.Builder builder) {
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 18888));

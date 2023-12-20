@@ -28,7 +28,7 @@ public class GroupDTO {
     /**
      * 发送消息频次
      */
-    private Integer frenquency;
+    private Integer frequency;
 
     /**
      * 发送消息内容

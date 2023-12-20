@@ -74,9 +74,9 @@ public class GroupMessageEventHandler implements EventHandler {
         }
         // 超过了一个计数周期, 重新计算
         if (now - groupDTO.getStartTime() > 60) {
-            groupDTO.setStartTime(now).setFrenquency(0).setContent(null);
+            groupDTO.setStartTime(now).setFrequency(0).setContent(null);
         }
-        groupDTO.setFrenquency(groupDTO.getFrenquency() + 1);
+        groupDTO.setFrequency(groupDTO.getFrequency() + 1);
         if (content.length() > 20) {
             if (groupDTO.getContent() == null) {
                 groupDTO.setContent(new ArrayList<>());
@@ -90,12 +90,12 @@ public class GroupMessageEventHandler implements EventHandler {
             }
         }
         // 发送频率一分钟超过10次, 且长内容超过2次, 判断为刷屏
-        if (groupDTO.getFrenquency() >= 10 && groupDTO.getContent() != null && groupDTO.getContent().size() >= 2) {
+        if (groupDTO.getFrequency() >= 10 && groupDTO.getContent() != null && groupDTO.getContent().size() >= 2) {
             // 禁言5分钟
             realEvent.getGroup().get(memberId).mute(60*5);
         }
         // 发送频率一分钟超过30次, 禁言一天
-        if (groupDTO.getFrenquency() >= 30) {
+        if (groupDTO.getFrequency() >= 30) {
             realEvent.getGroup().get(memberId).mute(60*60*24);
         }
     }

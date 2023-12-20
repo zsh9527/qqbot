@@ -61,7 +61,7 @@ public class EventListener {
      * 析构函数
      */
     @PreDestroy
-    void destory() {
+    void destroy() {
         this.listeners.stream().forEach(listener -> {
             if (!listener.isCompleted()) {
                 listener.complete();

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.Bot;
+import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,7 @@ public class ScheduledTask {
                 int hour = LocalDateTime.now().getHour();
                 if ((hour >= 9 && hour <= 12) || (hour >= 15 && hour <= 21)) {
                     // 非休息时间执行任务
-                    bot.getFriend(qqProp.getBroQQ()).sendMessage(httpClient.buildAttackMessage());
+                    bot.getFriend(qqProp.getBroQQ()).sendMessage(buildAttackMessage());
                 }
             },
             0,
@@ -113,6 +114,19 @@ public class ScheduledTask {
             0,
             1,
             TimeUnit.DAYS);
+    }
+
+    private MessageChain buildAttackMessage() {
+        return new MessageChainBuilder()
+            .append(new PlainText(qqProp.getBroContent()))
+            .build();
+        //return new MessageChainBuilder()
+        //    .append(new PlainText("大学生\n"))
+        //    .append(new PlainText("给你哥写英语学习计划和学习方法去\n"))
+        //    .append(new PlainText("冬天多喝点热水\n"))
+        //    .append(new PlainText("不要翘二郎腿"))
+        //    .build();
+
     }
 }
 

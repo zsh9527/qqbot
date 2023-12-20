@@ -37,6 +37,11 @@ public class QqProp {
     private Long broQQ;
 
     /**
+     * 定时发送的消息内容
+     */
+    private String broContent;
+
+    /**
      * 管理的群列表
      */
     private List<Long> groups;

@@ -21,39 +21,30 @@ import java.io.File;
 public class BotConfig {
 
     private final QqProp qqProp;
-
-    private final String RESOURCE_DIR = "D:\\coderLife\\githubProject\\qqbot\\src\\main\\resources\\device\\";
-    private final String CACHE_DIR = "D:\\coderLife\\githubProject\\qqbot\\build\\cache";
+    private final ConfigFileProp configFileProp;
 
     /**
      * 登录qq机器人 -- 尝试不同协议登录
      */
     @Bean
     public Bot loginBot() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        String dirName = classLoader.getResource("device/").getFile();
-        if (dirName.contains("BOOT-INF/classes!") || !(new File(dirName).exists())) {
-            log.info("执行jar包或本地镜像");
-            // jar包, 无法修改文件
-            dirName = RESOURCE_DIR;
-        }
         BotConfiguration.MiraiProtocol[] protocols = BotConfiguration.MiraiProtocol.values();
-        return getBotByQRcode(dirName, protocols);
+        return getBotByQRcode(protocols);
     }
 
     /**
      * 二维码登录
      */
     @Nullable
-    private Bot getBotByQRcode(String dirName, BotConfiguration.MiraiProtocol[] protocols) {
+    private Bot getBotByQRcode(BotConfiguration.MiraiProtocol[] protocols) {
         Bot bot = null;
         for (BotConfiguration.MiraiProtocol protocol : protocols) {
-            String finalDirName = dirName;
+            String finalDirName = configFileProp.getQqDeviceDir();
             bot = BotFactory.INSTANCE.newBot(qqProp.getUsername(), BotAuthorization.byQRCode(), new BotConfiguration() {{
                 // 不同协议使用不同设备信息
                 fileBasedDeviceInfo(finalDirName + protocol.name() + ".json");
                 // 修改缓存目录到build/cache目录下
-                setCacheDir(new File(CACHE_DIR));
+                setCacheDir(new File(configFileProp.getQqCacheDir()));
                 setProtocol(protocol);
             }});
             try {
@@ -70,15 +61,15 @@ public class BotConfig {
      * 密码登录
      */
     @Nullable
-    private Bot getBotByPassword(String dirName, BotConfiguration.MiraiProtocol[] protocols) {
+    private Bot getBotByPassword(BotConfiguration.MiraiProtocol[] protocols) {
         Bot bot = null;
         for (BotConfiguration.MiraiProtocol protocol : protocols) {
-            String finalDirName = dirName;
+            String finalDirName = configFileProp.getQqDeviceDir();
             bot = BotFactory.INSTANCE.newBot(qqProp.getUsername(), qqProp.getPassword(), new BotConfiguration() {{
                 // 不同协议使用不同设备信息
                 fileBasedDeviceInfo(finalDirName + protocol.name() + ".json");
                 // 修改缓存目录到build/cache目录下
-                setCacheDir(new File(CACHE_DIR));
+                setCacheDir(new File(configFileProp.getQqCacheDir()));
                 setProtocol(protocol);
             }});
             try {
