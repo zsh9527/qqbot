@@ -31,7 +31,7 @@ public class OkHttpClientConfig {
     /**
      * 配置okHttpClient
      */
-    @Bean
+    @Bean(name = "okHttpClient")
     public OkHttpClient okHttpClient() {
         // 最大请求数
         Dispatcher dispatcher = new Dispatcher();

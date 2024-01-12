@@ -1,31 +1,32 @@
 @echo off
+chcp 65001
 
 cls
-title °²×°JDK17
+title å®‰è£…JDK17
 color 0A
 
 echo.
 echo ==============================
-echo ¿ªÊ¼°²×°JDK17
+echo å¼€å§‹å®‰è£…JDK17
 echo ==============================
 echo.
 
-::ÅÐ¶ÏÊÇ·ñÒÑ°²×°
+::åˆ¤æ–­æ˜¯å¦å·²å®‰è£…
 call :CHECKJDK
 if %errorlevel% == 0 (
     echo.
-    echo JDK ÒÑ°²×°, Ìø¹ý°²×°²½Öè
+    echo JDK å·²å®‰è£…, è·³è¿‡å®‰è£…æ­¥éª¤
     echo.
     goto :END
 )
 
-::ÉèÖÃ°²×°Â·¾¶
+::è®¾ç½®å®‰è£…è·¯å¾„
 set install_path=C:\Program Files\Java
 set script_path=%~dp0
 set file_name=jdk-17.0.9
 set copy_jdk_path=%script_path%%file_name%
 
-:: ¼ì²é°²×°Ä¿Â¼ÊÇ·ñ´æÔÚ£¬²»´æÔÚÔò´´½¨
+:: æ£€æŸ¥å®‰è£…ç›®å½•æ˜¯å¦å­˜åœ¨ï¼Œä¸å­˜åœ¨åˆ™åˆ›å»º
 if not exist "%install_path%\" (
     mkdir "%install_path%"
 )
@@ -33,54 +34,54 @@ if not exist "%install_path%\%file_name%\" (
     mkdir "%install_path%\%file_name%"
 )
 
-::°²×°
+::å®‰è£…
 xcopy "%copy_jdk_path%" "%install_path%\%file_name%\" /S /Y > NUL
 if %errorlevel% NEQ 0 (
-    set fail_message=°²×°JDKÊ§°Ü
+    set fail_message=å®‰è£…JDKå¤±è´¥
     goto :FAIL
 ) else (
     echo.
-    echo °²×°JDK³É¹¦£¬¼´½«ÅäÖÃ»·¾³±äÁ¿
+    echo å®‰è£…JDKæˆåŠŸï¼Œå³å°†é…ç½®çŽ¯å¢ƒå˜é‡
     echo.
 )
 
-::ÉèÖÃ»·¾³±äÁ¿
+::è®¾ç½®çŽ¯å¢ƒå˜é‡
 call :SETENV
 if %errorlevel% NEQ 0 (
-    set fail_message=ÅäÖÃ»·¾³±äÁ¿Ê§°Ü
+    set fail_message=é…ç½®çŽ¯å¢ƒå˜é‡å¤±è´¥
     goto :FAIL
 ) else (
     echo.
-    echo ÅäÖÃ»·¾³±äÁ¿³É¹¦£¬¼´½«²âÊÔ
+    echo é…ç½®çŽ¯å¢ƒå˜é‡æˆåŠŸï¼Œå³å°†æµ‹è¯•
     echo.
 )
-::¼ì²éÊÇ·ñ°²×°³É¹¦
+::æ£€æŸ¥æ˜¯å¦å®‰è£…æˆåŠŸ
 call :CHECKJDK
 if %errorlevel% NEQ 0 (
-    set fail_message=java°²×°Ê§°Ü
+    set fail_message=javaå®‰è£…å¤±è´¥
     goto :FAIL
 ) else (
     echo.
-    echo °²×°³É¹¦
+    echo å®‰è£…æˆåŠŸ
     echo.
     goto :END
 )
 
-::ÅäÖÃ»·¾³±äÁ¿
+::é…ç½®çŽ¯å¢ƒå˜é‡
 :SETENV
 setx PATH "%install_path%\%file_name%\bin;%path%"
 set PATH=%install_path%\%file_name%\bin;%path%
 exit /b %errorlevel%
 
-:: ¼ì²éÊÇ·ñ°²×° JDK
+:: æ£€æŸ¥æ˜¯å¦å®‰è£… JDK
 :CHECKJDK
 java -version >nul 2>&1
 exit /b %errorlevel%
 
-:: °²×°Ê§°Ü
+:: å®‰è£…å¤±è´¥
 :FAIL
 echo.
-echo °²×°Ê§°Ü: %fail_message%
+echo å®‰è£…å¤±è´¥: %fail_message%
 echo.
 
 :END

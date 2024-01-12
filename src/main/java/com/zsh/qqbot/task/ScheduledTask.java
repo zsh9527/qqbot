@@ -1,4 +1,4 @@
-package com.zsh.qqbot.service;
+package com.zsh.qqbot.task;
 
 import com.zsh.qqbot.client.HttpClient;
 import com.zsh.qqbot.config.QqProp;

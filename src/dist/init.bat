@@ -1,28 +1,30 @@
 @echo off
 setlocal enabledelayedexpansion
+chcp 65001
 
 cls
-title ³õÊ¼»¯QQ»úÆ÷ÈË
+title åˆå§‹åŒ–QQæœºå™¨äºº
 color 0A
 
-::´´½¨Ä¿Â¼
+::åˆ›å»ºç›®å½•
 if not exist "%~dp0config" mkdir "%~dp0config"
 if not exist "%~dp0device" mkdir "%~dp0device"
 if not exist "%~dp0cache" mkdir "%~dp0cache"
 
 echo.
 echo ==============================
-echo Çë°´ÕÕÌáÊ¾ÊäÈëÅäÖÃĞÅÏ¢
+echo è¯·æŒ‰ç…§æç¤ºè¾“å…¥é…ç½®ä¿¡æ¯
 echo ==============================
 echo.
 
-set /p qqUsername="ÇëÊäÈëqqºÅ:"
-set /p qqPassword="ÇëÊäÈëqqÃÜÂë(Ä¿Ç°Ê¹ÓÃÉ¨ÂëµÇÂ¼, ÃÜÂë²»ÓÃÊäÈë):"
-set /p qqBroQQ="ÊäÈëÉ§ÈÅqqºÅ:"
-set /p qqBroContent="ÊäÈë·¢ËÍµÄÉ§ÈÅÄÚÈİ:"
-set /p qqGroups="ÊäÈë¹ÜÀíÈºµÄqqºÅ:"
+set /p qqUsername="è¯·è¾“å…¥qqå·:"
+set /p qqPassword="è¯·è¾“å…¥qqå¯†ç (ç›®å‰ä½¿ç”¨æ‰«ç ç™»å½•, å¯†ç ä¸ç”¨è¾“å…¥):"
+set /p qqLoverQQ="è¾“å…¥çˆ±äººqqå·:"
+set /p qqBroQQ="è¾“å…¥éªšæ‰°qqå·:"
+set /p qqBroContent="è¾“å…¥å‘é€çš„éªšæ‰°å†…å®¹:"
+set /p qqGroups="è¾“å…¥ç®¡ç†ç¾¤çš„qqå·:"
 
-::´´½¨ÅäÖÃÎÄ¼şÄÚÈİ
+::åˆ›å»ºé…ç½®æ–‡ä»¶å†…å®¹
 set temp_file=%~dp0config\application-prod.yml_temp
 set application_file=%~dp0config\application-prod.yml
 (
@@ -35,26 +37,27 @@ echo qq:
 echo     config:
 echo         username: %qqUsername%
 echo         password: %qqPassword%
+echo         loverQQ: %qqLoverQQ%
 echo         broQQ: %qqBroQQ%
 echo         broContent: %qqBroContent%
 echo         groups: %qqGroups%
 ) > %temp_file%
 
 echo.
-echo Éú³ÉµÄÅäÖÃÎÄ¼şÄÚÈİÈçÏÂ
+echo ç”Ÿæˆçš„é…ç½®æ–‡ä»¶å†…å®¹å¦‚ä¸‹
 echo.
 type %temp_file%
 echo.
-set /p confirm="ÊÇ·ñ±£´æ¸ÃÅäÖÃÎÄ¼ş? (Y/N)"
+set /p confirm="æ˜¯å¦ä¿å­˜è¯¥é…ç½®æ–‡ä»¶? (Y/N)"
 if /i "%confirm%"=="n" (
     DEL %temp_file%
     echo.
-    echo È¡Ïû²Ù×÷
+    echo å–æ¶ˆæ“ä½œ
     echo.
 ) else (
     move %temp_file% %application_file% >nul 2>&1
     echo.
-    echo ÅäÖÃÄÚÈİÒÑ±£´æ%application_file%
+    echo é…ç½®å†…å®¹å·²ä¿å­˜%application_file%
     echo.
 )
 pause

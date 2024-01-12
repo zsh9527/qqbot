@@ -30,6 +30,7 @@ logging:
     com.zsh: info
     okhttp3:
       OkHttpClient: error
+    net.mamoe.mirai.Bot: debug
   logback:
     rollingpolicy:
       max-file-size: 100MB
@@ -39,6 +40,3 @@ file:
     qq-device-dir: D:\coderLife\githubProject\qqbot\src\main\resources\device\
     qq-cache-dir: D:\coderLife\githubProject\qqbot\build\cache
     log-dir: /home/logs
-# 个人隐私信息
-qq:
-  config:

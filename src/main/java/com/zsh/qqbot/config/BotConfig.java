@@ -26,7 +26,7 @@ public class BotConfig {
     /**
      * 登录qq机器人 -- 尝试不同协议登录
      */
-    @Bean
+    @Bean(name = "bot")
     public Bot loginBot() {
         BotConfiguration.MiraiProtocol[] protocols = BotConfiguration.MiraiProtocol.values();
         return getBotByQRcode(protocols);
@@ -81,6 +81,4 @@ public class BotConfig {
         }
         return bot;
     }
-
-
 }

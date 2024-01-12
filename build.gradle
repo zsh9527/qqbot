@@ -1,3 +1,11 @@
+import proguard.gradle.ProGuardTask
+
+buildscript {
+    dependencies {
+        classpath 'com.guardsquare:proguard-gradle:7.4.1'
+    }
+}
+
 plugins {
     id("java")
     id("application")
@@ -22,11 +30,13 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4")
     implementation('net.mamoe:mirai-core-api:2.16.0')
+    implementation('net.mamoe:mirai-logging-slf4j-logback:2.16.0')
     runtimeOnly("net.mamoe:mirai-core:2.16.0")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation('com.squareup.okhttp3:okhttp:4.10.0')
     implementation("org.apache.commons:commons-lang3")
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.68'
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly("org.projectlombok:lombok")
@@ -34,12 +44,6 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-
-jar {
-    processResources {
-        exclude("db/*")
-    }
 }
 
 tasks.withType(Test) {
@@ -50,16 +54,116 @@ tasks.withType(Test) {
 application {
     mainClass = 'com.zsh.qqbot.QQbotApplication'
     applicationDefaultJvmArgs = [
-            '-Dfile.encoding=UTF-8',
+            '-Dfile.encoding=GBK',
             "-Dspring.profiles.active=prod",
             '-Dspring.config.additional-location=../config/'
     ]
 }
 
-//// 自动复制新的device文件
-//task copyGeneratedFile(type: Copy) {
-//    from 'build/resources/main/device' // 指定生成的文件的路径
-//    into 'src/main/resources/device' // 指定要复制到的目标路径
-//}
-//
-//processResources.dependsOn(copyGeneratedFile)
+// https://github.com/Guardsquare/proguard/blob/7160a9e48490a09f8b1ba92dfbb2c4293c71577a/examples/application/build.gradle
+task replaceBatContent(type: Copy) {
+    group("distribution")
+    def replaceFile = 'build/install/' + getApplicationName() + "/bin/" + getApplicationName() + '.bat'
+    def tempFile = 'build/install_temp/' + getApplicationName() + '.bat'
+    from(replaceFile)
+    into new File(tempFile).parent
+    filter { line ->
+        line.replaceAll('set CLASSPATH=.*', 'set CLASSPATH=%APP_HOME%\\\\lib\\\\*')
+    }
+    doLast {
+        // add pause for debug
+        def tempFileWriter = new FileWriter(tempFile, true)
+        tempFileWriter.append('\npause\n')
+        tempFileWriter.close()
+        copy {
+            from(tempFile)
+            into new File(replaceFile).parent
+        }
+    }
+}
+
+installDist.finalizedBy replaceBatContent
+
+// proguard 混淆字节码相关任务
+// @link https://github.com/Guardsquare/proguard/blob/7160a9e48490a09f8b1ba92dfbb2c4293c71577a/examples/spring-boot/build.gradle
+// 混淆jar包名称
+ext.baseCoordinates = "${project.name}-${project.version}-plain.jar"
+// 混淆文件目录, 完整jar包目录为BOOT-INF下
+//ext.proguardDir = "${buildDir}/extracted/BOOT-INF/classes"
+ext.proguardDir = "${buildDir}/extracted"
+// 解压jar包
+task extractJar(type: Copy) {
+    group("proguard")
+    dependsOn tasks.jar
+
+    doFirst {
+        delete "${buildDir}/extracted"
+    }
+
+    def zipFile = file("${buildDir}/libs/${baseCoordinates}")
+    def outputDir = file("${buildDir}/extracted")
+
+    from zipTree(zipFile)
+    into outputDir
+}
+
+// 混淆然后打包
+task proguard(type: ProGuardTask) {
+    group("proguard")
+    dependsOn tasks.extractJar
+
+    doFirst {
+        // 删除application dev的配置
+        delete "${proguardDir}/application-dev.yml"
+        delete "${proguardDir}/application-dev.yaml"
+        delete "${proguardDir}/application-dev.properties"
+    }
+
+    injars  "${proguardDir}"
+    outjars "${buildDir}/obfuscatedClasses.jar"
+
+    // Automatically handle the Java version of this build.
+    if (System.getProperty('java.version').startsWith('1.')) {
+        // Before Java 9, the runtime classes were packaged in a single jar file.
+        libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
+    } else {
+        // As of Java 9, the runtime classes are packaged in modular jmod files.
+        libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
+        libraryjars "${System.getProperty('java.home')}/jmods/java.desktop.jmod"
+    }
+
+    // This will contain the Spring dependencies.
+    libraryjars sourceSets.main.compileClasspath
+
+    configuration "proguard.pro"
+
+    printmapping "${buildDir}/mapping.txt"
+    // 打印未使用的文件
+    printusage "${buildDir}/useless.txt"
+}
+
+// 解压混淆后jar包
+task copyObfuscatedClasses(type: Copy) {
+    group("proguard")
+    dependsOn tasks.proguard
+
+    doFirst {
+        delete("${proguardDir}")
+    }
+
+    from zipTree("${buildDir}/obfuscatedClasses.jar")
+    into "${proguardDir}"
+}
+
+task repackage(type: Zip) {
+    group("proguard")
+    dependsOn tasks.copyObfuscatedClasses
+
+    from  "${buildDir}/extracted"
+    entryCompression ZipEntryCompression.STORED
+    archiveFileName= "${baseCoordinates}"
+    destinationDirectory = file("${buildDir}/libs")
+}
+
+startScripts.dependsOn repackage
+installDist.dependsOn repackage

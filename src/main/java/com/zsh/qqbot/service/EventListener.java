@@ -10,6 +10,7 @@ import net.mamoe.mirai.event.Listener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ public class EventListener {
 
     private final Bot bot;
 
-    private List<EventHandler> handlers;
+    private EventHandler[] handlers;
 
     private List<Listener> listeners;
 
@@ -37,7 +38,7 @@ public class EventListener {
      * @param handlers 所有的处理器
      */
     @Autowired(required = false)
-    public void setHandlers(List<EventHandler> handlers) {
+    public void setHandlers(EventHandler[] handlers) {
         this.handlers = handlers;
     }
 
@@ -46,7 +47,7 @@ public class EventListener {
      */
     @PostConstruct
     void listen() {
-        this.listeners = handlers.stream()
+        this.listeners = Arrays.stream(handlers)
             .map(handler -> bot.getEventChannel()
                 .exceptionHandler(exception -> {
                     log.info(exception.getMessage(), exception);
